@@ -89,4 +89,40 @@ impl Circle {
 let c = Circle{x:0.0,y:0.0,r:2.0};
 println!("{:?}",c.area());
 
+#[derive(Debug)]
+struct CircleBuilder {
+    x: f64,
+    y: f64,
+    r: f64,
+}
+impl CircleBuilder{
+    fn new() -> CircleBuilder {
+        CircleBuilder{x:0.0,y:0.0,r:0.0,}
+    }
+
+    fn x(&mut self, coorinate: f64) -> &mut CircleBuilder{
+        self.x = coorinate;
+        self
+    }
+    fn y(&mut self, coorinate: f64) -> &mut CircleBuilder{
+        self.y = coorinate;
+        self
+    }
+    fn r(&mut self, coorinate: f64) -> &mut CircleBuilder{
+        self.r = coorinate;
+        self
+    }
+
+    fn finalize(&self) -> Circle{
+        Circle{x: self.x,y: self.y, r: self.r}
+    }
+
+}
+ let cc = CircleBuilder::new()
+            .x(0.0)
+            .y(0.0)
+            .r(2.0)
+            .finalize();
+
+            println!("area is {:?}",cc.area());
 }
