@@ -1,65 +1,92 @@
+
+
+use std::sync::Arc;
+use std::cell::Cell;
+
 fn main() {
-    println!("Hello, world!");
 
-    let mut v = vec![1,2,3,4,5];
-    let mut v2 = v;
-    //println!("{:?}",v);
-    println!("{:?}",v2);
-    //v2 = take(v2);
-    func1(&v2);
-    println!("{:?}",v2);
-    println!("{:?}" , sum_vec(&v2));
+    //let x = Arc::new(5);
+    //let y = x.clone();
 
-    let mut x  = 5;
-    println!("{:?}", x);
-{
-    let  y = &mut x;
-    *y += 1;
-}
-    println!("{:?}", x);
+    // let x = RefCell::new(10);
+    // let y = x.borrow_mut();
+    // let z = x.borrow_mut();
 
-    for i in &mut v2 {
-        println!("{:?}",i);
-        //v2.push(34);
+    // println!("{:?}",y);
+
+    #[derive(Debug)]
+    struct Point {
+        x: i32,
+        y: i32,
     }
-let x =5;
-    let y: &i32;
-    
-    y = &x;
-    print!("{:?}",y);
 
-    let line = "lang:en=Hello World!";
-    let lang = "en";
-    let v;
+    let mut point = Point{x:10,y: 15};
+    //point.y.set(7);
+
+    println!("{:?}",point);
+
+    #[derive(Debug)]
+    struct PointRef<'a> {
+        x: &'a mut i32,
+        y: &'a mut i32,
+    }
+
     {
-        let p = format!("lang:{}",lang);
-        v = skip_prefix(&line,p.as_str());
+        let point_ref = PointRef{x: &mut point.x , y: &mut point.y};
+        *point_ref.y += 1;
     }
-    println!("{:?}",v);
-    let z = &5;
-    let f = Foo{x: y};
-    println!("{:?}",f.x);
+    println!("{:?}",point);
+
+    fn coorinates() -> (i32,i32,i32){
+        (10,11,12)
+    }
+
+{
+    let (x,_,_) = coorinates();
+    println!("{:?}",x);
+}   
+
+let tuple: (u32, String) = (5,String::from("five"));
+let (x,_) = tuple;
+println!("{:?}",tuple);
+
+#[derive(Debug)]
+struct Person {
+    name: Option<String>,
+}
+
+let name = "Steve".to_string();
+let x: Option<Person> = Some(Person {name: Some(name)});
+match x {
+    Some(Person {name: ref a@ Some(_),..}) => println!("{:?}",a),
+    _ => {}
+}
+
+
+for x in 1..16 {
+    match (x%3 , x%5) {
+        (0 , 0) => println!("{:?}","FizzBuzz"),
+        (0,_) => println!("{:?}","Fizz"),
+        (_, 0) => println!("{:?}","Buzz"),
+        (..) => println!("{:?}",x),
+    }
+
 }
 
 #[derive(Debug)]
-struct Foo<'a> {
-    x: &'a i32,
+struct Circle {
+    x: f64,
+    y: f64,
+    r: f64,
 }
 
-fn skip_prefix<'a,'b>(line: &'a str, prefix: &'b str) -> &'a str {
-    return "rest";
+impl Circle {
+     fn area(&self) -> f64{
+         std::f64::consts::PI * (self.r * self.r)
+     }
 }
 
-fn sum_vec(v: &Vec<i32>) -> i32{
-    return v.iter().fold(0,|a,&b| a+b);
-}
-
-
-fn take(v: Vec<i32>)-> Vec<i32>{
- return v;
-}
-
-fn func1(v: &Vec<i32>){
+let c = Circle{x:0.0,y:0.0,r:2.0};
+println!("{:?}",c.area());
 
 }
-
